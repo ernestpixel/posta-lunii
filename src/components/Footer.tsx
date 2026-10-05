@@ -1,5 +1,8 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import type { LandingContent } from '@/lib/content'
+import { ANPC, COMPANY, LEGAL_LINKS, WITHDRAWAL_HREF } from '@/lib/legal'
+import { CookieSettingsButton } from './CookieConsent'
 
 type Props = {
   footer: LandingContent['footer']
@@ -36,6 +39,27 @@ export function Footer({ footer, instagramUrl }: Props) {
             {footer.instagramLabel}
           </a>
         </div>
+        <nav className="pl-footer__legal" aria-label="Informații legale">
+          {LEGAL_LINKS.map((link) => (
+            <Link key={link.href} href={link.href}>
+              {link.label}
+            </Link>
+          ))}
+          <CookieSettingsButton />
+          <Link href={WITHDRAWAL_HREF}>Retrage-te din contract aici</Link>
+        </nav>
+        <div className="pl-footer__anpc">
+          <a href={ANPC.sal} target="_blank" rel="noopener" aria-label="ANPC – Soluționarea alternativă a litigiilor">
+            <Image src="/assets/anpc-sal.png" alt="ANPC – Soluționarea alternativă a litigiilor" width={204} height={52} sizes="204px" />
+          </a>
+          <a href={ANPC.sol} target="_blank" rel="noopener" aria-label="Soluționarea online a litigiilor">
+            <Image src="/assets/anpc-sol.png" alt="Soluționarea online a litigiilor" width={200} height={55} sizes="200px" />
+          </a>
+        </div>
+        <p className="pl-footer__company">
+          {COMPANY.name} · CUI {COMPANY.cui} · {COMPANY.regCom} · EUID {COMPANY.euid} · {COMPANY.address} ·{' '}
+          <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+        </p>
         <div className="pl-footer__base">
           <span>
             <Image src="/assets/paw.webp" alt="" width={400} height={395} sizes="20px" />

@@ -20,6 +20,9 @@ export function buildLlmsTxt(landing: LandingContent, settings: ResolvedSettings
       ]
       if (plan.savings) parts.push(`  ${strip(plan.savings)}${plan.descriptionAfter ? ` ${strip(plan.descriptionAfter)}` : ''}`)
       if (plan.fine) parts.push(`  ${strip(plan.fine)}`)
+      for (const option of plan.paymentOptions ?? []) {
+        parts.push(`  - ${strip(option.label)}${option.detail ? `: ${strip(option.detail)}` : ''}`)
+      }
       return parts.join('\n')
     })
     .join('\n')

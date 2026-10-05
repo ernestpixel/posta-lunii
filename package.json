@@ -15,12 +15,14 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/seed.ts",
+    "seed:plans": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed/update-plans.ts",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload"
   },
   "dependencies": {
     "@payloadcms/db-sqlite": "3.90.2",
+    "@payloadcms/email-nodemailer": "3.90.2",
     "@payloadcms/next": "3.90.2",
     "@payloadcms/richtext-lexical": "3.90.2",
     "@payloadcms/ui": "3.90.2",

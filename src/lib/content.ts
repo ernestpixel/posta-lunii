@@ -20,6 +20,12 @@ export type EnvelopeItem = {
   note?: string | null
 }
 
+export type PaymentOption = {
+  label: string
+  detail?: string | null
+  checkoutUrl: string
+}
+
 export type Plan = {
   name: string
   price: string
@@ -30,6 +36,9 @@ export type Plan = {
   fine?: string | null
   ctaLabel: string
   checkoutUrl: string
+  /** Variante de plată pentru același plan (ex. lunar vs. integral). Cu cel puțin
+   *  două, cardul afișează un selector și butonul urmează alegerea. */
+  paymentOptions?: PaymentOption[] | null
   featured?: boolean | null
   badge?: string | null
 }
@@ -199,7 +208,7 @@ export const defaultLanding: LandingContent = {
         priceSuffix: '',
         description: 'Primești ediția lunii următoare, livrată prin poștă.',
         ctaLabel: 'Cumpără plicul de luna viitoare',
-        checkoutUrl: '#',
+        checkoutUrl: 'https://buy.stripe.com/14A28q4RX0vn7B6bBc3Ru00',
         featured: false,
       },
       {
@@ -211,7 +220,19 @@ export const defaultLanding: LandingContent = {
         descriptionAfter: '— adică o lună este practic din partea noastră. 💌',
         fine: 'Poți alege: plata integrală, o singură dată — sau plata recurentă, lună de lună.',
         ctaLabel: 'Abonează-mă pentru un an',
-        checkoutUrl: '#',
+        checkoutUrl: 'https://buy.stripe.com/9B69ASesxgulf3ygVw3Ru01',
+        paymentOptions: [
+          {
+            label: 'Lunar',
+            detail: '55 lei în fiecare lună, plată recurentă',
+            checkoutUrl: 'https://buy.stripe.com/9B69ASesxgulf3ygVw3Ru01',
+          },
+          {
+            label: 'Integral',
+            detail: '660 lei o singură dată, pentru 12 luni',
+            checkoutUrl: 'https://buy.stripe.com/5kQ14m0BHdi92gMbBc3Ru02',
+          },
+        ],
         featured: true,
         badge: 'Recomandat',
       },

@@ -60,6 +60,42 @@ După fiecare salvare, pagina publică se reconstruiește imediat
 de la procesatorul de plăți (Stripe, Netopia, EuPlătesc…). Cât timp rămâne `#`,
 butonul nu duce nicăieri, iar în datele structurate oferta trimite către `/#preturi`.
 
+Un plan poate avea și **Variante de plată** (ex. abonamentul de 12 luni: *Lunar* →
+link Stripe recurent, *Integral* → link Stripe unic). Cu cel puțin două variante,
+cardul afișează un selector, iar butonul urmează alegerea. Pe o bază de date deja
+populată, `pnpm seed:plans` rescrie doar planurile din `src/lib/content.ts`.
+
+Butoanele de plată funcționează doar după ce clientul bifează acordul cu Termenii
+și condițiile (`src/components/TermsConsent.tsx`).
+
+---
+
+## Conformitate legală (GDPR, consumatori, cookie-uri)
+
+| Ce | Unde |
+| --- | --- |
+| Datele PFA, emailul de contact, ID-ul GA4, data actualizării | `src/lib/legal.ts` |
+| Termeni și condiții (+ formularul model de retragere) | `/termeni-si-conditii` |
+| Politica de confidențialitate | `/politica-de-confidentialitate` |
+| Politica de cookie-uri | `/politica-cookies` |
+| Funcția „Retrage-te din contract aici” (Directiva UE 2023/2673) | `/retragere` → **Comenzi → Retrageri din contract** în admin |
+| Banner cookie + Google Analytics 4 | `src/components/CookieConsent.tsx`, `src/lib/consent.ts` |
+
+**Cum merge Google Analytics:** Consent Mode v2 pornește cu totul pe „denied”
+(script inline în `<head>`). `gtag.js` se încarcă **doar** după „Accept” — înainte
+nu pleacă nicio cerere către Google. „Refuz” are același stil ca „Accept”, iar
+alegerea se schimbă oricând din footer („Setări cookie”); retragerea acordului
+șterge cookie-urile `_ga`. Alegerea se ține 6 luni în cookie-ul `pl_consent`.
+Dacă adaugi cookie-uri opționale noi, crește `CONSENT_VERSION` și actualizează
+politica de cookie-uri.
+
+**Retragerea din contract:** cererea se salvează în admin și primește un număr de
+înregistrare. Confirmarea pe email pleacă doar dacă e configurat SMTP
+(`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` — vezi
+`.env.example`).
+
+Când schimbi un text legal, actualizează `LEGAL_UPDATED` din `src/lib/legal.ts`.
+
 ### Secțiunea de întrebări (tabul 7)
 
 Este **dezactivată implicit**, ca pagina să arate exact ca macheta. Când o
@@ -159,8 +195,17 @@ Pentru staging există bifa **Blochează indexarea** în Setări → SEO: pune
 4. Parola contului de admin schimbată.
 5. Verifică linkul de Instagram (în brief era marcat „de verificat”).
 6. Ia în calcul activarea secțiunii de întrebări.
-7. Un adaptor de email în `payload.config.ts`, dacă vrei resetare de parolă pe mail
-   (acum mesajele se scriu în consolă).
+7. SMTP în variabilele de mediu (`SMTP_*`) — pentru confirmarea retragerilor din
+   contract și resetarea parolei de admin.
+8. În Stripe (Settings → Public details / Checkout): URL-urile Termenilor și ale
+   Politicii de confidențialitate, plus bifa „Require customers to accept your
+   terms of service” pe fiecare Payment Link.
+9. În Stripe, abonamentul lunar trebuie să se oprească după 12 plăți (Termenii
+   promit asta) — de ex. setează-l să se anuleze automat după 12 cicluri.
+10. În Google Analytics: Admin → Data retention → **14 luni** (cât scrie în politică)
+    și dezactivează Google Signals.
+11. Baza de date de producție trebuie să aibă tabelele noi (variante de plată,
+    retrageri) — `push` e oprit în producție.
 
 ## Structura
 

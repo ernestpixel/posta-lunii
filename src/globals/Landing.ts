@@ -197,6 +197,27 @@ export const Landing: GlobalConfig = {
                   ],
                 },
                 {
+                  name: 'paymentOptions',
+                  type: 'array',
+                  label: 'Variante de plată',
+                  labels: { singular: 'Variantă', plural: 'Variante' },
+                  maxRows: 3,
+                  admin: {
+                    description:
+                      'Opțional. Cu cel puțin două variante, cardul afișează un selector (ex. lunar / integral), iar butonul duce la linkul variantei alese. Prima variantă e selectată implicit.',
+                  },
+                  fields: [
+                    {
+                      type: 'row',
+                      fields: [
+                        { name: 'label', type: 'text', label: 'Nume', required: true, admin: { width: '30%', description: 'ex. „Lunar”' } },
+                        { name: 'detail', type: 'text', label: 'Detaliu', admin: { width: '70%', description: 'ex. „55 lei în fiecare lună”' } },
+                      ],
+                    },
+                    { name: 'checkoutUrl', type: 'text', label: 'Link checkout', required: true },
+                  ],
+                },
+                {
                   type: 'row',
                   fields: [
                     { name: 'featured', type: 'checkbox', label: 'Recomandat (evidențiat)', admin: { width: '50%' } },

@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    withdrawals: Withdrawal;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +79,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    withdrawals: WithdrawalsSelect<false> | WithdrawalsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -202,6 +204,27 @@ export interface Media {
   };
 }
 /**
+ * Declarații trimise prin funcția „Retrage-te din contract aici”. Rambursarea se face în cel mult 14 zile de la primire.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "withdrawals".
+ */
+export interface Withdrawal {
+  id: number;
+  reference: string;
+  name: string;
+  email: string;
+  product: 'single' | 'monthly' | 'annual';
+  contract: string;
+  address?: string | null;
+  message?: string | null;
+  status?: ('new' | 'processing' | 'refunded' | 'closed') | null;
+  acknowledgementSent?: boolean | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -232,6 +255,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'withdrawals';
+        value: number | Withdrawal;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -354,6 +381,24 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "withdrawals_select".
+ */
+export interface WithdrawalsSelect<T extends boolean = true> {
+  reference?: T;
+  name?: T;
+  email?: T;
+  product?: T;
+  contract?: T;
+  address?: T;
+  message?: T;
+  status?: T;
+  acknowledgementSent?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -463,6 +508,23 @@ export interface Landing {
            * Aici se leagă plata (Stripe, Netopia, EuPlătesc…).
            */
           checkoutUrl: string;
+          /**
+           * Opțional. Cu cel puțin două variante, cardul afișează un selector (ex. lunar / integral), iar butonul duce la linkul variantei alese. Prima variantă e selectată implicit.
+           */
+          paymentOptions?:
+            | {
+                /**
+                 * ex. „Lunar”
+                 */
+                label: string;
+                /**
+                 * ex. „55 lei în fiecare lună”
+                 */
+                detail?: string | null;
+                checkoutUrl: string;
+                id?: string | null;
+              }[]
+            | null;
           featured?: boolean | null;
           badge?: string | null;
           id?: string | null;
@@ -615,6 +677,14 @@ export interface LandingSelect<T extends boolean = true> {
               fine?: T;
               ctaLabel?: T;
               checkoutUrl?: T;
+              paymentOptions?:
+                | T
+                | {
+                    label?: T;
+                    detail?: T;
+                    checkoutUrl?: T;
+                    id?: T;
+                  };
               featured?: T;
               badge?: T;
               id?: T;

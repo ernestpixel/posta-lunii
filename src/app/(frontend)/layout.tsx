@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import { Caveat, Fraunces, Instrument_Sans } from 'next/font/google'
+import Script from 'next/script'
 
+import { CookieConsent } from '@/components/CookieConsent'
 import { Motion } from '@/components/Motion'
+import { consentDefaultScript } from '@/lib/consent'
 import { getSettings } from '@/lib/payload-content'
 import { absoluteUrl, LANG, LOCALE, siteUrl } from '@/lib/site'
 
@@ -131,8 +134,13 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
         <noscript>
           <style>{NOSCRIPT_CSS}</style>
         </noscript>
+        {/* Consent Mode v2: totul refuzat implicit, înaintea oricărui tag Google. */}
+        <Script id="consent-default" strategy="beforeInteractive">
+          {consentDefaultScript}
+        </Script>
         {children}
         <Motion />
+        <CookieConsent />
       </body>
     </html>
   )

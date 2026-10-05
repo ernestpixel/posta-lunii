@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { LEGAL_LINKS } from '@/lib/legal'
 import { siteUrl } from '@/lib/site'
 
 /** Ultima modificare reală a conținutului, ca sitemap-ul să nu mintă. */
@@ -26,5 +27,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 1,
     },
+    ...LEGAL_LINKS.map((link) => ({
+      url: `${siteUrl}${link.href}`,
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    })),
   ]
 }
