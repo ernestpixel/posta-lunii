@@ -1,0 +1,43 @@
+/* ============================================================
+   Poșta Lunii — design tokens
+   Toate culorile paginii vin de aici. Nu introduce culori noi
+   în afara acestor variabile.
+   ============================================================ */
+
+:root {
+  --paper-50: #fbf7ee;
+  --paper-100: #f6f0e4;
+  --paper-200: #efe5d2;
+  --kraft-300: #e2cda8;
+  --kraft-500: #c69a63;
+  --line: #dccbae;
+  --ink-900: #2a2a33;
+  --ink-600: #5b5561;
+  --night-900: #1b1836;
+  --night-700: #2e2450;
+  --on-night: var(--paper-100);
+  --on-night-muted: #cfc6dc;
+  --moon-300: #e7c77a;
+  --moon-500: #d4a857;
+  --moon-ink: #7a5a17;
+  --on-moon: var(--ink-900);
+  --ember-500: #c66a3d;
+  --brick-600: #a5432f;
+  --olive-500: #7a8450;
+  --olive-700: #56603a;
+
+  --font-serif: var(--font-fraunces), Fraunces, 'Iowan Old Style', Georgia, serif;
+  --font-sans: var(--font-instrument-sans), 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-hand: var(--font-caveat), Caveat, 'Segoe Script', cursive;
+}
+
+html,
+body {
+  background: #f6f0e4;
+  color: #2a2a33;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+}
